@@ -1,0 +1,175 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>华文闯关王｜五组20分钟无限闯关</title><style>
+:root{font-family:'Microsoft YaHei','Noto Sans CJK SC',sans-serif;color:#27334c}*{box-sizing:border-box}body{margin:0;background:linear-gradient(130deg,#e0f2fe,#fce7f3 60%,#fef3c7);min-height:100vh}.shell{max-width:1060px;margin:0 auto;padding:20px}.head{text-align:center}.head h1{font-size:clamp(30px,5vw,49px);color:#6645b6;margin:14px 0 4px}.head p{color:#667085}.panel{background:#fff;border-radius:24px;padding:clamp(16px,3vw,30px);box-shadow:0 14px 40px #5868a029;margin:18px 0}.hide{display:none!important}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}.field{display:flex;flex-direction:column;gap:7px;font-weight:700}input,select{border:2px solid #e0def0;border-radius:12px;padding:11px;font-size:17px;width:100%;background:white;color:#29334a}button{border:0;border-radius:13px;background:#7355cf;color:white;padding:12px 17px;font-size:17px;font-weight:700;cursor:pointer;margin:4px}button:hover{filter:brightness(.96)}button:disabled{opacity:.4;cursor:default}.secondary{background:#eeeafb;color:#514395}.warning{background:#f5a524;color:#392400}.success{background:#168b72}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.center{text-align:center}.muted{color:#69738a}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{background:#f2ecff;border-radius:999px;padding:8px 13px}.topline{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:18px;font-weight:800}.bar{height:13px;border-radius:20px;background:#e9e5f9;margin:18px 0;overflow:hidden}.bar div{height:100%;background:linear-gradient(90deg,#8b5cf6,#16a6a1);transition:width .2s}.prompt{font-size:clamp(19px,3vw,26px);font-weight:800;text-align:center;margin:23px 0}.answer{background:#f7f5ff;border:2px dashed #b5a7e4;border-radius:15px;min-height:85px;padding:18px;text-align:center;font-size:clamp(19px,3vw,25px);white-space:pre-line}.tiles{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;margin:23px 0}.tile{background:#e9f1ff;color:#26446d;min-width:75px;max-width:100%;white-space:normal;line-height:1.5}.tile.used{background:#fde6a9;color:#654c1c}.feedback{min-height:36px;font-size:20px;font-weight:700;text-align:center}.table{width:100%;border-collapse:collapse;text-align:left}.table th,.table td{padding:13px 10px;border-bottom:1px solid #eceaf5}.table th{background:#f7f5ff}.big{font-size:42px;font-weight:900;color:#7651c9}.stage{color:#7855c5;font-weight:800}.footer{font-size:13px;text-align:center;color:#727b90;margin:18px}.banner{background:#f0f9ff;padding:14px;border-radius:14px}.groupinputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:12px 0}.pill{border-radius:999px;background:#fdf1d4;padding:6px 12px}.sep{border:0;border-top:1px solid #eee;margin:22px 0}@media(max-width:600px){.shell{padding:9px}.panel{border-radius:18px}.table th,.table td{padding:8px 4px;font-size:14px}button{font-size:15px}}
+.fixedsetting{padding:12px;border-radius:12px;background:#eef6ff;font-weight:700;color:#364b78}</style></head><body><div class="shell"><header class="head"><h1>🏆 华文闯关王</h1><p>小学高年级 · 五组自由入场 · 每组20分钟 · 150题不重复题库</p></header>
+<section id="setup" class="panel"><h2>👩‍🏫 教师设置台</h2><p class="muted">共5个小组，每组最多20分钟；各组按照闯关站路线，在不同时间来到本站作答，无限闯关，150题题库（简单20%／中等70%／困难10%），每组已出现的题目不会重复，字词和句子选项每题都会打乱；各组独立计时20分钟，答得越多、答对越多，积分越高。</p><div class="grid"><label class="field">小组数量<input id="groupCount" type="hidden" value="5"><div class="fixedsetting">👥 固定 5 组</div></label><label class="field">每组比赛时间<input id="duration" type="hidden" value="1200"><div class="fixedsetting">⏱️ 每组 20 分钟</div></label><label class="field">竞赛方式<div class="fixedsetting">♾️ 无限闯关 · 自动换题</div></label></div><h3>✏️ 小组名称</h3><div id="groupInputs" class="groupinputs"></div><div class="banner">📚 第一关：构成词语（每题10分）<br>🧩 第二关：组短句、句子成段（每题15分）<br>🔥 连续答对额外加分，错误不扣分。题库150题，每10题尽量按2简单、7中等、1困难的比例随机出现；每组已出现的题目不再重复，答完150题则提前结束；每组最多20分钟，跳过不加分。排名按总分、答对题数、答题总数依次比较。</div><div class="center" style="margin-top:18px"><button id="startBtn">🚀 建立本站比赛</button><button id="resumeBtn" class="success hide">📂 继续未完成的本站比赛</button><button id="clearBtn" class="secondary">🗑 清除本机历史成绩</button></div><div id="history"></div></section>
+<section id="handoff" class="panel hide center"><div class="stage" id="turnLabel"></div><p>选择现在抵达华文站的小组（已完成的小组不能重复作答）</p><select id="chooseTeam" aria-label="选择抵达小组"></select><p class="muted" id="stationStatus"></p><h2 id="turnGroup" class="big"></h2><p>请这一组学生到设备前准备，其他小组暂时不要观看答题。</p><p class="muted">教师选定抵达的小组并点击开始后，才会倒数20分钟。</p><button id="goBtn">🎮 开始本组挑战</button><div id="betweenRank"></div></section>
+<section id="game" class="panel hide"><div class="topline"><span id="groupName"></span><span id="round"></span><span id="clock"></span><span id="score"></span></div><div class="bar"><div id="progress"></div></div><div class="stage center" id="type"></div><div class="prompt" id="prompt"></div><div class="answer" id="answer">请选择文字</div><div id="tiles" class="tiles"></div><div class="center"><button class="secondary" id="undoBtn">↩ 撤回</button><button class="secondary" id="resetBtn">🧹 清空</button><button class="success" id="submitBtn">✅ 提交答案</button><button class="warning" id="skipBtn">⏭ 跳过</button></div><div id="feedback" class="feedback" aria-live="polite"></div></section>
+<section id="done" class="panel hide center"><h2>🎉 全部小组挑战完成！</h2><div class="big">🏅 最终排行榜</div><div id="finalRanks"></div><p class="muted">比赛成绩保存在本机浏览器，也可以下载 CSV 表格。</p><button id="exportBtn">📥 导出本次成绩 CSV</button><button id="againBtn" class="secondary">🔄 开始新一场比赛</button></section><div class="footer">离线闯关站版 · 5组自由顺序挑战，每组20分钟无限答题 · 题目顺序随机 · 不支持跨设备实时同步</div></div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const bank=[
+{type:'词语组合',prompt:'选择两个字，组成表示“仔细看”的词语。',tokens:['观','察','美','丽'],answer:['观','察']},
+{type:'词语组合',prompt:'选择两个字，组成表示“想出新办法”的词语。',tokens:['创','新','安','静'],answer:['创','新']},
+{type:'词语组合',prompt:'选择两个字，组成表示“互相配合”的词语。',tokens:['合','作','清','晨'],answer:['合','作']},
+{type:'词语组合',prompt:'选择两个字，组成表示“不怕困难”的词语。',tokens:['勇','敢','整','齐'],answer:['勇','敢']},
+{type:'词语组合',prompt:'选择两个字，组成表示“认真而谨慎”的词语。',tokens:['仔','细','热','闹'],answer:['仔','细']},
+{type:'词语组合',prompt:'选择两个字，组成表示“保护并爱惜”的词语。',tokens:['爱','护','参','观'],answer:['爱','护']},
+{type:'词语组合',prompt:'选择两个字，组成表示“从错误中得到的认识”的词语。',tokens:['教','训','快','乐'],answer:['教','训']},
+{type:'词语组合',prompt:'选择两个字，组成表示“用心尽力做事”的词语。',tokens:['努','力','温','暖'],answer:['努','力']},
+{type:'组短句',prompt:'将词语排成一句通顺的话。',tokens:['同学们','在图书馆里','安静地','阅读。'],answer:['同学们','在图书馆里','安静地','阅读。']},
+{type:'组短句',prompt:'将词语排成一句通顺的话。',tokens:['老师','耐心地','为我们','讲解题目。'],answer:['老师','耐心地','为我们','讲解题目。']},
+{type:'组短句',prompt:'将词语排成一句通顺的话。',tokens:['我们','应该','珍惜','宝贵的时间。'],answer:['我们','应该','珍惜','宝贵的时间。']},
+{type:'组短句',prompt:'将词语排成一句通顺的话。',tokens:['小明','主动','帮助','有困难的同学。'],answer:['小明','主动','帮助','有困难的同学。']},
+{type:'句子成段',prompt:'按事情发生的先后顺序，排列成一段话。',tokens:['我们把垃圾分类放进回收箱。','星期五，学校举行环保活动。','大家看着整洁的校园，开心地笑了。','同学们带着工具来到操场集合。'],answer:['星期五，学校举行环保活动。','同学们带着工具来到操场集合。','我们把垃圾分类放进回收箱。','大家看着整洁的校园，开心地笑了。']},
+{type:'句子成段',prompt:'把句子排列成一段完整的故事。',tokens:['最后，他终于学会了骑自行车。','爸爸扶着车尾，鼓励他不要害怕。','周末，小华到公园练习骑自行车。','虽然跌倒了几次，他还是继续尝试。'],answer:['周末，小华到公园练习骑自行车。','爸爸扶着车尾，鼓励他不要害怕。','虽然跌倒了几次，他还是继续尝试。','最后，他终于学会了骑自行车。']},
+{type:'句子成段',prompt:'按合理顺序排列句子。',tokens:['不久，嫩绿的小芽钻出了泥土。','我每天给种子浇适量的水。','我把几颗种子种进花盆里。','看着小芽，我感到十分高兴。'],answer:['我把几颗种子种进花盆里。','我每天给种子浇适量的水。','不久，嫩绿的小芽钻出了泥土。','看着小芽，我感到十分高兴。']}
+];
+const extraWords=[
+['诚','实','守','候','说真话，不欺骗'],['尊','重','安','排','看重并礼貌对待'],['鼓','励','优','秀','给别人信心和支持'],['节','约','欣','赏','不浪费'],['团','结','采','访','为了共同目标互相支持'],['责','任','风','景','应该承担的事情'],['耐','心','积','极','不急躁，能坚持等待'],['信','任','收','获','相信并依靠'],['关','怀','充','足','关心照顾'],['整','洁','熟','悉','干净而整齐'],['遵','守','记','录','按照规定去做'],['欣','赏','服','务','怀着喜爱的心情观看'],['探','索','确','认','寻找并研究未知事物'],['环','境','欢','迎','周围的自然与生活条件'],['知','识','练','习','学习后获得的认识'],['目','标','清','楚','想要达到的结果'],['坚','持','喜','悦','不轻易放弃'],['谦','虚','勇','气','不自满，愿意学习'],['热','情','安','全','态度亲切而积极'],['感','谢','整','理','表达谢意'],['维','护','团','体','保护使不受损害'],['改','善','交','流','使情况变得更好'],['准','备','清','凉','事先安排好'],['自','信','勇','敢','相信自己的能力'],['礼','貌','快','速','待人有礼的态度'],['认','真','成','功','做事专心不马虎'],['发','现','结','束','找到原本没注意的事物'],['思','考','参','加','动脑筋想问题'],['分','享','礼','物','把好东西与别人一起享用'],['珍','惜','浪','费','重视并爱护']];
+const extraSentences=[
+['我们','每天','都要','认真完成作业。'],['大家','一起','把教室','打扫干净。'],['妹妹','高兴地','向老师','挥手问好。'],['妈妈','提醒我','出门前','带好雨伞。'],['小鸟','在树枝上','快乐地','唱歌。'],['同学们','积极参加','学校举办的','环保活动。'],['我们','应该主动','帮助','需要帮助的人。'],['下课后','小华','把借来的书','放回书架。'],['爸爸','每天早晨','到公园里','锻炼身体。'],['老师','鼓励大家','勇敢地','表达自己的想法。'],['经过努力','小美','终于','完成了作品。'],['我和朋友','在操场上','开心地','踢足球。'],['遇到困难时','我们','不要','轻易放弃。'],['哥哥','仔细地','检查','自己的答案。'],['雨停以后','天空中','出现了','美丽的彩虹。'],['同学们','轮流','分享','阅读心得。'],['我们','必须','遵守','交通规则。'],['清晨','奶奶','在花园里','浇花。'],['小明','主动向朋友','承认','自己的错误。'],['大家','安静地','听校长','发表讲话。']];
+const extraParagraphs=[
+['早上，我们来到学校的菜园。','老师先教我们松土。','接着，大家把菜苗种进土里。','最后，我们为菜苗浇水。'],
+['星期六，我和家人去海边。','我们先在沙滩上散步。','接着，大家一起捡拾垃圾。','离开时，海滩变得更干净了。'],
+['小明发现地上有一个钱包。','他马上把钱包交给老师。','老师通过证件找到了失主。','失主向诚实的小明表示感谢。'],
+['运动会当天，同学们早早来到操场。','比赛开始后，选手们奋力奔跑。','大家在跑道旁热情地加油。','最后，老师为获奖者颁奖。'],
+['放学后，天空突然下起大雨。','小丽发现同桌没有带伞。','她主动邀请同桌共用雨伞。','两人一起平安地回到了家。'],
+['学校举办了一场阅读比赛。','小华每天抽时间认真练习。','比赛时，他清楚地朗读文章。','最后，他获得了老师的称赞。'],
+['周末，妈妈教我做三明治。','我先洗净生菜和番茄。','接着，把食材放在面包中间。','尝到自己做的早餐，我很开心。'],
+['我发现教室角落有许多废纸。','于是，我提议设立回收箱。','同学们纷纷把废纸投入箱中。','一个月后，我们回收了不少纸张。'],
+['一天，小猫爬上树却不敢下来。','小华看到后立刻向大人求助。','邻居叔叔小心地把小猫抱下来。','小华高兴地向叔叔道谢。'],
+['科学课上，老师让我们观察种子。','我们把种子放在湿棉花上。','几天后，种子慢慢发芽了。','大家兴奋地记录观察结果。']
+];
+extraWords.forEach(([a,b,c,d,meaning])=>bank.push({type:'词语组合',prompt:'选择两个字，组成表示“'+meaning+'”的词语。',tokens:[a,b,c,d],answer:[a,b]}));
+extraSentences.forEach(parts=>bank.push({type:'组短句',prompt:'将词语排成一句通顺的话。',tokens:parts,answer:[...parts]}));
+extraParagraphs.forEach(parts=>bank.push({type:'句子成段',prompt:'按合理顺序把句子排列成一段话。',tokens:parts,answer:[...parts]}));
+
+bank.forEach(q=>q.difficulty='中等');
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“干净，没有污垢”的词语。", "tokens": ["清", "洁", "太", "阳"], "answer": ["清", "洁"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“替别人解决困难”的词语。", "tokens": ["帮", "助", "花", "园"], "answer": ["帮", "助"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“心里高兴”的词语。", "tokens": ["快", "乐", "书", "包"], "answer": ["快", "乐"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“学生学习的地方”的词语。", "tokens": ["学", "校", "公", "园"], "answer": ["学", "校"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“互相友好相处的人”的词语。", "tokens": ["朋", "友", "老", "师"], "answer": ["朋", "友"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“做事不马虎”的词语。", "tokens": ["认", "真", "天", "气"], "answer": ["认", "真"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“送给别人的东西”的词语。", "tokens": ["礼", "物", "故", "事"], "answer": ["礼", "物"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“一天刚开始的时候”的词语。", "tokens": ["早", "晨", "午", "餐"], "answer": ["早", "晨"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“活动身体”的词语。", "tokens": ["运", "动", "美", "丽"], "answer": ["运", "动"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“没有危险”的词语。", "tokens": ["安", "全", "热", "闹"], "answer": ["安", "全"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“关爱别人的心意”的词语。", "tokens": ["爱", "心", "风", "景"], "answer": ["爱", "心"]});
+bank.push({"type": "词语组合", "difficulty": "简单", "prompt": "选择文字，组成表示“对问题作出回应”的词语。", "tokens": ["回", "答", "安", "静"], "answer": ["回", "答"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["我", "每天", "按时", "上学。"], "answer": ["我", "每天", "按时", "上学。"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["小猫", "正在", "椅子上", "睡觉。"], "answer": ["小猫", "正在", "椅子上", "睡觉。"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["妹妹", "喜欢", "阅读", "故事书。"], "answer": ["妹妹", "喜欢", "阅读", "故事书。"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["我们", "一起", "保护", "环境。"], "answer": ["我们", "一起", "保护", "环境。"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["老师", "正在", "教室里", "上课。"], "answer": ["老师", "正在", "教室里", "上课。"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["小明", "每天", "认真", "写字。"], "answer": ["小明", "每天", "认真", "写字。"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["妈妈", "在厨房里", "准备", "晚餐。"], "answer": ["妈妈", "在厨房里", "准备", "晚餐。"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["同学们", "排队", "进入", "礼堂。"], "answer": ["同学们", "排队", "进入", "礼堂。"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["大家", "应该", "节约", "用水。"], "answer": ["大家", "应该", "节约", "用水。"]});
+bank.push({"type": "组短句", "difficulty": "简单", "prompt": "将词语排成一句通顺的话。", "tokens": ["爸爸", "周末", "带我", "去公园。"], "answer": ["爸爸", "周末", "带我", "去公园。"]});
+bank.push({"type": "句子成段", "difficulty": "简单", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["早晨，我背着书包去学校。", "走进校门，我向老师问好。", "接着，我回到教室放好书包。", "上课铃响了，我们开始学习。"], "answer": ["早晨，我背着书包去学校。", "走进校门，我向老师问好。", "接着，我回到教室放好书包。", "上课铃响了，我们开始学习。"]});
+bank.push({"type": "句子成段", "difficulty": "简单", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["我先拿出一张白纸。", "然后，我用铅笔画出一朵花。", "接着，我为花朵涂上颜色。", "最后，我把画送给妈妈。"], "answer": ["我先拿出一张白纸。", "然后，我用铅笔画出一朵花。", "接着，我为花朵涂上颜色。", "最后，我把画送给妈妈。"]});
+bank.push({"type": "句子成段", "difficulty": "简单", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["放学后，我回到家里。", "我先洗手，再吃点心。", "接着，我认真完成作业。", "做完功课后，我才去玩耍。"], "answer": ["放学后，我回到家里。", "我先洗手，再吃点心。", "接着，我认真完成作业。", "做完功课后，我才去玩耍。"]});
+bank.push({"type": "句子成段", "difficulty": "简单", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["今天是星期日。", "我和家人来到公园。", "我们沿着小路慢慢散步。", "傍晚，大家高兴地回家。"], "answer": ["今天是星期日。", "我和家人来到公园。", "我们沿着小路慢慢散步。", "傍晚，大家高兴地回家。"]});
+bank.push({"type": "句子成段", "difficulty": "简单", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["妈妈买回一些水果。", "我先把苹果洗干净。", "接着，我把水果放在盘子里。", "最后，我们一起享用水果。"], "answer": ["妈妈买回一些水果。", "我先把苹果洗干净。", "接着，我把水果放在盘子里。", "最后，我们一起享用水果。"]});
+bank.push({"type": "句子成段", "difficulty": "简单", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["下雨前，天空布满乌云。", "不久，雨点落了下来。", "大家赶快撑起雨伞。", "雨停后，太阳又出现了。"], "answer": ["下雨前，天空布满乌云。", "不久，雨点落了下来。", "大家赶快撑起雨伞。", "雨停后，太阳又出现了。"]});
+bank.push({"type": "句子成段", "difficulty": "简单", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["早上，我发现花盆里的土很干。", "我拿来小水壶。", "接着，我轻轻地给花浇水。", "看到花儿挺直了身子，我很开心。"], "answer": ["早上，我发现花盆里的土很干。", "我拿来小水壶。", "接着，我轻轻地给花浇水。", "看到花儿挺直了身子，我很开心。"]});
+bank.push({"type": "句子成段", "difficulty": "简单", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["学校举行大扫除。", "老师先分配工作。", "同学们认真打扫教室。", "最后，教室变得干净整齐。"], "answer": ["学校举行大扫除。", "老师先分配工作。", "同学们认真打扫教室。", "最后，教室变得干净整齐。"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“检查自己的思想和行为”的词语。", "tokens": ["反", "省", "感", "谢"], "answer": ["反", "省"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“为集体付出力量”的词语。", "tokens": ["贡", "献", "精", "彩"], "answer": ["贡", "献"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“做事的效果与速度”的词语。", "tokens": ["效", "率", "计", "划"], "answer": ["效", "率"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“教育训练使成长”的词语。", "tokens": ["培", "养", "关", "怀"], "answer": ["培", "养"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“使各方面配合得当”的词语。", "tokens": ["协", "调", "管", "理"], "answer": ["协", "调"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“引导别人产生新的想法”的词语。", "tokens": ["启", "发", "收", "获"], "answer": ["启", "发"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“交换意见以增进了解”的词语。", "tokens": ["沟", "通", "改", "善"], "answer": ["沟", "通"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“根据情况作出决定”的词语。", "tokens": ["判", "断", "支", "持"], "answer": ["判", "断"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“可以利用的物资和条件”的词语。", "tokens": ["资", "源", "挑", "战"], "answer": ["资", "源"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“把想法付诸行动”的词语。", "tokens": ["实", "践", "观", "察"], "answer": ["实", "践"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“坚持完成事情的力量”的词语。", "tokens": ["毅", "力", "勇", "敢"], "answer": ["毅", "力"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“事先安排步骤”的词语。", "tokens": ["规", "划", "责", "任"], "answer": ["规", "划"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“值得受到尊重的身份与人格”的词语。", "tokens": ["尊", "严", "诚", "实"], "answer": ["尊", "严"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“带头提议并推动”的词语。", "tokens": ["倡", "导", "参", "与"], "answer": ["倡", "导"]});
+bank.push({"type": "词语组合", "difficulty": "中等", "prompt": "选择文字，组成表示“调整自己以符合新环境”的词语。", "tokens": ["适", "应", "交", "流"], "answer": ["适", "应"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["面对困难时", "我们应该", "冷静地", "寻找解决办法。"], "answer": ["面对困难时", "我们应该", "冷静地", "寻找解决办法。"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["为了保护环境", "同学们主动", "参与", "资源回收活动。"], "answer": ["为了保护环境", "同学们主动", "参与", "资源回收活动。"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["老师的鼓励", "使原本害羞的小丽", "勇敢地", "站上讲台。"], "answer": ["老师的鼓励", "使原本害羞的小丽", "勇敢地", "站上讲台。"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["阅读不同类型的书籍", "能够帮助我们", "开阔", "视野。"], "answer": ["阅读不同类型的书籍", "能够帮助我们", "开阔", "视野。"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["经过反复练习", "运动员终于", "掌握了", "正确的技巧。"], "answer": ["经过反复练习", "运动员终于", "掌握了", "正确的技巧。"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["当意见不同时", "我们应当", "耐心倾听", "别人的看法。"], "answer": ["当意见不同时", "我们应当", "耐心倾听", "别人的看法。"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["这次失败", "让小明", "明白了", "坚持的重要性。"], "answer": ["这次失败", "让小明", "明白了", "坚持的重要性。"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["班长把任务", "公平地", "分配给", "每一位组员。"], "answer": ["班长把任务", "公平地", "分配给", "每一位组员。"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["为了节省时间", "大家提前", "准备好", "比赛所需的材料。"], "answer": ["为了节省时间", "大家提前", "准备好", "比赛所需的材料。"]});
+bank.push({"type": "组短句", "difficulty": "中等", "prompt": "将词语排成一句通顺的话。", "tokens": ["面对突发状况", "老师及时", "采取了", "适当的措施。"], "answer": ["面对突发状况", "老师及时", "采取了", "适当的措施。"]});
+bank.push({"type": "句子成段", "difficulty": "中等", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["学校准备举办义卖会。", "各班先讨论要售卖的物品。", "活动当天，同学们分工合作。", "最后，义卖所得捐给有需要的人。"], "answer": ["学校准备举办义卖会。", "各班先讨论要售卖的物品。", "活动当天，同学们分工合作。", "最后，义卖所得捐给有需要的人。"]});
+bank.push({"type": "句子成段", "difficulty": "中等", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["我原本不敢在众人面前讲话。", "老师鼓励我参加演讲练习。", "我每天对着镜子反复练习。", "比赛当天，我终于能自信地表达。"], "answer": ["我原本不敢在众人面前讲话。", "老师鼓励我参加演讲练习。", "我每天对着镜子反复练习。", "比赛当天，我终于能自信地表达。"]});
+bank.push({"type": "句子成段", "difficulty": "中等", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["小区的河流出现了许多垃圾。", "居民决定一起进行清洁活动。", "大家分组清理河岸并分类垃圾。", "河流周围逐渐恢复了整洁。"], "answer": ["小区的河流出现了许多垃圾。", "居民决定一起进行清洁活动。", "大家分组清理河岸并分类垃圾。", "河流周围逐渐恢复了整洁。"]});
+bank.push({"type": "句子成段", "difficulty": "中等", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["科学小组想了解植物需要多少阳光。", "他们把相同的幼苗放在不同位置。", "每天，组员记录植物的生长情况。", "比较结果后，大家提出了自己的发现。"], "answer": ["科学小组想了解植物需要多少阳光。", "他们把相同的幼苗放在不同位置。", "每天，组员记录植物的生长情况。", "比较结果后，大家提出了自己的发现。"]});
+bank.push({"type": "句子成段", "difficulty": "中等", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["校队在第一场比赛中失利。", "队员们一起讨论需要改进的地方。", "之后，大家按照计划加强训练。", "下一场比赛中，他们表现得更加出色。"], "answer": ["校队在第一场比赛中失利。", "队员们一起讨论需要改进的地方。", "之后，大家按照计划加强训练。", "下一场比赛中，他们表现得更加出色。"]});
+bank.push({"type": "词语组合", "difficulty": "困难", "prompt": "选择文字，组成表示“不断努力，绝不放弃”的词语。", "tokens": ["锲", "而", "不", "舍", "精", "益", "求", "精"], "answer": ["锲", "而", "不", "舍"]});
+bank.push({"type": "词语组合", "difficulty": "困难", "prompt": "选择文字，组成表示“事先做好准备”的词语。", "tokens": ["未", "雨", "绸", "缪", "循", "序", "渐", "进"], "answer": ["未", "雨", "绸", "缪"]});
+bank.push({"type": "词语组合", "difficulty": "困难", "prompt": "选择文字，组成表示“集合众人的智慧”的词语。", "tokens": ["集", "思", "广", "益", "全", "力", "以", "赴"], "answer": ["集", "思", "广", "益"]});
+bank.push({"type": "词语组合", "difficulty": "困难", "prompt": "选择文字，组成表示“观察形势并作出判断”的词语。", "tokens": ["审", "时", "度", "势", "因", "地", "制", "宜"], "answer": ["审", "时", "度", "势"]});
+bank.push({"type": "词语组合", "difficulty": "困难", "prompt": "选择文字，组成表示“从细小迹象看出发展趋势”的词语。", "tokens": ["见", "微", "知", "著", "举", "一", "反", "三"], "answer": ["见", "微", "知", "著"]});
+bank.push({"type": "词语组合", "difficulty": "困难", "prompt": "选择文字，组成表示“去除旧的糟粕并创造新的”的词语。", "tokens": ["推", "陈", "出", "新", "温", "故", "知", "新"], "answer": ["推", "陈", "出", "新"]});
+bank.push({"type": "组短句", "difficulty": "困难", "prompt": "将词语排成一句通顺的话。", "tokens": ["即使研究过程中", "出现了意想不到的困难", "小组成员仍然", "坚持寻找可靠的证据。"], "answer": ["即使研究过程中", "出现了意想不到的困难", "小组成员仍然", "坚持寻找可靠的证据。"]});
+bank.push({"type": "组短句", "difficulty": "困难", "prompt": "将词语排成一句通顺的话。", "tokens": ["与其急于否定", "和自己不同的意见", "不如先认真分析", "对方提出的理由。"], "answer": ["与其急于否定", "和自己不同的意见", "不如先认真分析", "对方提出的理由。"]});
+bank.push({"type": "组短句", "difficulty": "困难", "prompt": "将词语排成一句通顺的话。", "tokens": ["通过比较不同资料的来源", "我们才能", "更谨慎地", "判断信息是否可信。"], "answer": ["通过比较不同资料的来源", "我们才能", "更谨慎地", "判断信息是否可信。"]});
+bank.push({"type": "组短句", "difficulty": "困难", "prompt": "将词语排成一句通顺的话。", "tokens": ["只有充分了解问题的原因", "并考虑各种可能的后果", "我们才有机会", "提出可行的解决方案。"], "answer": ["只有充分了解问题的原因", "并考虑各种可能的后果", "我们才有机会", "提出可行的解决方案。"]});
+bank.push({"type": "句子成段", "difficulty": "困难", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["社区计划减少一次性塑料用品的使用。", "调查发现，不少居民仍习惯索取塑料袋。", "志愿者于是提供环保袋并说明重复使用的好处。", "数周后，商店记录到塑料袋使用量逐渐下降。"], "answer": ["社区计划减少一次性塑料用品的使用。", "调查发现，不少居民仍习惯索取塑料袋。", "志愿者于是提供环保袋并说明重复使用的好处。", "数周后，商店记录到塑料袋使用量逐渐下降。"]});
+bank.push({"type": "句子成段", "difficulty": "困难", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["科学展览前，小组制作的模型突然无法运作。", "组员先检查电源，再逐一测试连接线路。", "他们发现一处接头松动，便重新固定。", "模型终于恢复正常，大家也学会了系统排查问题。"], "answer": ["科学展览前，小组制作的模型突然无法运作。", "组员先检查电源，再逐一测试连接线路。", "他们发现一处接头松动，便重新固定。", "模型终于恢复正常，大家也学会了系统排查问题。"]});
+bank.push({"type": "句子成段", "difficulty": "困难", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["班级讨论是否应该延长图书馆开放时间。", "支持者认为这能增加课后阅读机会。", "其他同学则担心管理人手不足。", "经过讨论，大家建议先试行一周再评估效果。"], "answer": ["班级讨论是否应该延长图书馆开放时间。", "支持者认为这能增加课后阅读机会。", "其他同学则担心管理人手不足。", "经过讨论，大家建议先试行一周再评估效果。"]});
+bank.push({"type": "句子成段", "difficulty": "困难", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["一篇网络文章声称某种植物能迅速净化所有污水。", "小华没有立即转发，而是查找可信的科学资料。", "他发现文章缺少实验条件与数据支持。", "因此，他提醒同学们分享资讯前应先核实。"], "answer": ["一篇网络文章声称某种植物能迅速净化所有污水。", "小华没有立即转发，而是查找可信的科学资料。", "他发现文章缺少实验条件与数据支持。", "因此，他提醒同学们分享资讯前应先核实。"]});
+bank.push({"type": "句子成段", "difficulty": "困难", "prompt": "按事情发展的合理顺序排列句子。", "tokens": ["学校的用电量连续几个月上升。", "环保小组检查各教室的电器使用情况。", "他们建议离开教室时关闭不必要的电源。", "实施一个月后，小组再比较数据以评估成效。"], "answer": ["学校的用电量连续几个月上升。", "环保小组检查各教室的电器使用情况。", "他们建议离开教室时关闭不必要的电源。", "实施一个月后，小组再比较数据以评估成效。"]});
+let teams=[],teamIndex=0,questionIndex=0,selected=[],questionSet=[],duration=1200,remaining=1200,interval=null,locked=false,ended=false,advanceTimer=null,deck=[],lastQuestion=null,difficultyDecks={},difficultyCycle=[],usedQuestionIds=new Set();
+function mix(arr){let x=[...arr];for(let i=x.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function show(id){['setup','handoff','game','done'].forEach(x=>$(x).classList.toggle('hide',x!==id))}
+function makeGroups(){let old=[...$('groupInputs').querySelectorAll('input')].map(x=>x.value);$('groupInputs').replaceChildren();for(let i=0;i<Number($('groupCount').value);i++){let input=document.createElement('input');input.placeholder='第 '+(i+1)+' 组';input.value=old[i]||['智慧队','勇气队','阳光队','希望队','彩虹队','星光队','梦想队','飞跃队'][i];input.maxLength=24;input.setAttribute('aria-label','第'+(i+1)+'组名称');$('groupInputs').append(input)}}
+$('groupCount').addEventListener('change',makeGroups);makeGroups();
+function prepare(){let names=[...$('groupInputs').querySelectorAll('input')].map((x,i)=>x.value.trim()||'第'+(i+1)+'组');if(new Set(names).size!==names.length){alert('每个小组名称必须不同。');return}teams=names.map(name=>({name,score:0,correct:0,wrong:0,used:0,combo:0,completed:false}));duration=Number($('duration').value);questionSet=[...bank];teamIndex=0;saveStation();handoff()}
+const STATION_KEY='huawen_station_pending_v1';
+function saveStation(){try{localStorage.setItem(STATION_KEY,JSON.stringify({teams,duration}))}catch(e){}}
+function refreshResume(){let raw=localStorage.getItem(STATION_KEY);$('resumeBtn').classList.toggle('hide',!raw)}
+function resumeStation(){try{let state=JSON.parse(localStorage.getItem(STATION_KEY));if(!state||!Array.isArray(state.teams)||state.teams.length!==5)throw Error('invalid');teams=state.teams;duration=state.duration||1200;questionSet=[...bank];handoff()}catch(e){alert('无法读取保存的比赛，请重新建立。')}}
+function handoff(){show('handoff');let pending=teams.map((t,i)=>({t,i})).filter(x=>!x.t.completed);if(!pending.length){finishAll();return}let select=$('chooseTeam');select.replaceChildren();pending.forEach(({t,i})=>{let opt=document.createElement('option');opt.value=i;opt.textContent=t.name;select.append(opt)});teamIndex=Number(select.value);function update(){teamIndex=Number(select.value);$('turnLabel').textContent='华文闯关站 · 自由顺序入场';$('turnGroup').textContent=teams[teamIndex].name;$('stationStatus').textContent='已完成 '+teams.filter(t=>t.completed).length+' / 5 组 · 待挑战 '+pending.length+' 组'}select.onchange=update;update();$('betweenRank').replaceChildren();let completed=teams.filter(t=>t.completed);if(completed.length){let h=document.createElement('h3');h.textContent='已完成小组成绩（教师查看）';$('betweenRank').append(h,rankingTable(completed))}}
+function begin(){questionIndex=0;remaining=duration;locked=false;ended=false;selected=[];deck=[];lastQuestion=null;difficultyDecks={};difficultyCycle=[];usedQuestionIds=new Set();show('game');render();clearInterval(interval);interval=setInterval(()=>{if(ended)return;remaining=Math.max(0,remaining-1);clock();if(remaining===0)finishTeam()},1000)}
+function nextQuestion(){
+  // 每组独立维护已出题编号；答对、答错、跳过均不会再出现。
+  if(usedQuestionIds.size>=questionSet.length)return null;
+  if(!difficultyCycle.length)difficultyCycle=mix(['简单','简单','中等','中等','中等','中等','中等','中等','中等','困难']);
+  let level=difficultyCycle.pop();
+  let available=questionSet.map((q,i)=>q.difficulty===level&&!usedQuestionIds.has(i)?i:-1).filter(i=>i>=0);
+  // 某一难度已用完时，从其他未使用题目补充，仍保证不重复。
+  if(!available.length)available=questionSet.map((q,i)=>!usedQuestionIds.has(i)?i:-1).filter(i=>i>=0);
+  const idx=available[Math.floor(Math.random()*available.length)];
+  usedQuestionIds.add(idx);
+  return questionSet[idx];
+}
+let activeQuestion=null;
+let tileOrder=[];
+function shuffledTiles(q){
+  const ids=q.tokens.map((_,i)=>i);
+  // 每一道题都打乱显示顺序，且不能刚好呈现正确答案顺序。
+  for(let tries=0;tries<30;tries++){
+    const order=mix(ids);
+    const displayed=order.map(i=>q.tokens[i]);
+    const answerAtStart=q.answer.every((word,i)=>displayed[i]===word);
+    if(!answerAtStart)return order;
+  }
+  return ids.slice().reverse();
+}
+function current(){return activeQuestion}
+function clock(){$('clock').textContent='⏱ '+Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0')}
+function render(){activeQuestion=nextQuestion();if(!activeQuestion){finishTeam();return}tileOrder=shuffledTiles(activeQuestion);selected=[];locked=false;let t=teams[teamIndex],q=current();$('groupName').textContent='👥 '+t.name;$('round').textContent='第 '+(questionIndex+1)+' / '+questionSet.length+' 题 · 已答对 '+t.correct+' 题';clock();$('score').textContent='⭐ '+t.score+' 分';$('progress').style.width=(100*(1-remaining/duration))+'%';$('type').textContent=(q.type==='词语组合'?'第一关 · 构成词语':'第二关 · '+q.type)+' · '+q.difficulty+'题';$('prompt').textContent=q.prompt;$('feedback').textContent='';draw()}
+function draw(){let q=current();$('answer').textContent=selected.length?selected.map(i=>q.tokens[i]).join(q.type==='句子成段'?'\n':' '):'题目已打乱，请点击文字重新排列正确顺序';$('tiles').replaceChildren();tileOrder.forEach(i=>{let token=q.tokens[i];let b=document.createElement('button');b.className='tile'+(selected.includes(i)?' used':'');b.textContent=token;b.disabled=selected.includes(i)||locked;b.onclick=()=>{if(!locked){selected.push(i);draw()}};$('tiles').append(b)})}
+function next(){if(ended)return;questionIndex++;render()}
+function submit(){if(locked||ended)return;let q=current();if(selected.length!==q.answer.length){$('feedback').textContent='请先选好完整答案。';return}locked=true;let t=teams[teamIndex];let ok=selected.map(i=>q.tokens[i]).every((x,i)=>x===q.answer[i]);if(ok){t.combo++;t.correct++;let base=q.type==='词语组合'?10:15,bonus=Math.min(t.combo-1,5)*2;t.score+=base+bonus;$('feedback').textContent='🎉 答对了！ +'+(base+bonus)+' 分';}else{t.combo=0;t.wrong++;$('feedback').textContent='💡 正确答案：'+q.answer.join(' → ')}$('score').textContent='⭐ '+t.score+' 分';draw();advanceTimer=setTimeout(()=>{if(!ended)next()},850)}
+function skip(){if(locked||ended)return;teams[teamIndex].combo=0;teams[teamIndex].wrong++;next()}
+function finishTeam(){if(ended)return;ended=true;clearInterval(interval);clearTimeout(advanceTimer);let t=teams[teamIndex];t.used=duration-remaining;t.completed=true;saveStation();if(teams.every(x=>x.completed))finishAll();else handoff()}
+function sorted(ts){return [...ts].sort((a,b)=>b.score-a.score||b.correct-a.correct||b.correct+b.wrong-a.correct-a.wrong||a.used-b.used)}
+function rankingTable(ts){let table=document.createElement('table');table.className='table';let tr=document.createElement('tr');['名次','小组','总分','答对','已答题','用时'].forEach(s=>{let th=document.createElement('th');th.textContent=s;tr.append(th)});let thead=document.createElement('thead');thead.append(tr);table.append(thead);let body=document.createElement('tbody');sorted(ts).forEach((t,i)=>{let row=document.createElement('tr');[i===0?'🥇 1':i===1?'🥈 2':i===2?'🥉 3':String(i+1),t.name,String(t.score),String(t.correct),String(t.correct+t.wrong),Math.floor(t.used/60)+'分'+String(t.used%60).padStart(2,'0')+'秒'].forEach(v=>{let td=document.createElement('td');td.textContent=v;row.append(td)});body.append(row)});table.append(body);return table}
+function finishAll(){localStorage.removeItem(STATION_KEY);refreshResume();show('done');$('finalRanks').replaceChildren(rankingTable(teams));let old=[];try{old=JSON.parse(localStorage.getItem('huawen_group_history')||'[]')}catch(e){}old.unshift({date:new Date().toLocaleString('zh-CN'),teams:teams.map(x=>({...x}))});try{localStorage.setItem('huawen_group_history',JSON.stringify(old.slice(0,20)))}catch(e){} }
+function csv(){let lines=[['名次','小组','总分','答对题数','答错或跳过','用时(秒)','总答题数','每组时限(秒)']];sorted(teams).forEach((t,i)=>lines.push([i+1,t.name,t.score,t.correct,t.wrong,t.used,t.correct+t.wrong,duration]));let esc=v=>'"'+String(v).replace(/"/g,'""')+'"';let blob=new Blob(['\ufeff'+lines.map(r=>r.map(esc).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});let url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='华文闯关王_小组成绩_'+new Date().toISOString().slice(0,10)+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+$('startBtn').onclick=()=>{if(localStorage.getItem(STATION_KEY)&&!confirm('已有未完成的本站比赛。建立新比赛将覆盖已保存的小组成绩，确定继续吗？'))return;prepare();refreshResume()};$('resumeBtn').onclick=resumeStation;$('goBtn').onclick=begin;$('undoBtn').onclick=()=>{if(!locked){selected.pop();draw()}};$('resetBtn').onclick=()=>{if(!locked){selected=[];draw()}};$('submitBtn').onclick=submit;$('skipBtn').onclick=skip;$('exportBtn').onclick=csv;$('againBtn').onclick=()=>{show('setup');history();refreshResume()};$('clearBtn').onclick=()=>{if(confirm('确定删除本机保存的历史比赛成绩吗？')){localStorage.removeItem('huawen_group_history');history()}};
+function history(){let h=[];try{h=JSON.parse(localStorage.getItem('huawen_group_history')||'[]')}catch(e){}$('history').replaceChildren();if(h.length){let title=document.createElement('h3');title.textContent='📋 本机最近比赛';$('history').append(title);h.slice(0,5).forEach(x=>{let p=document.createElement('p');let winner=sorted(x.teams)[0];p.textContent=x.date+' · 冠军：'+winner.name+'（'+winner.score+'分）';$('history').append(p)})}}history();refreshResume();
+</script></body></html>
